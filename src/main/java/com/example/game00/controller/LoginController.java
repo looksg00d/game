@@ -41,21 +41,18 @@ public class LoginController {
                 String storedPassword = rs.getString("password");
                 if (storedPassword.equals(password)) {
                     try {
-                        // Загрузка FXML для игры
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/game00/guess-view.fxml")); // Укажите правильный путь к FXML
                         Parent root = loader.load();
 
-                        // Открытие нового окна с игрой
                         Stage stage = new Stage();
                         stage.setTitle("Guess a number");
                         stage.setScene(new Scene(root));
                         stage.show();
 
-                        // Закрытие текущего окна логина
+                        // закрытие логина
                         ((Stage) usernameField.getScene().getWindow()).close();
                     } catch (IOException e) {
                         e.printStackTrace();
-                        // Обработка ошибок загрузки FXML
                     }
                 } else {
                     Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "Login ERROR", "Wrong password!"));

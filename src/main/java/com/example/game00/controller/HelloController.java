@@ -44,7 +44,6 @@ public class HelloController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            // Обработка ошибки
         }
     }
 
@@ -52,17 +51,15 @@ public class HelloController {
     void showLoginScreen(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/game00/login-view.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 552, 379); // Размер окна можно изменить
+            Scene scene = new Scene(fxmlLoader.load(), 552, 379);
             Stage stage = new Stage();
             stage.setTitle("Login");
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            // Обработка ошибки
         }
     }
-
     @FXML
     void initialize() {
     }

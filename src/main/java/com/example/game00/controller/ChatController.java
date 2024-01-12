@@ -23,7 +23,7 @@ public class ChatController {
     @FXML
     public void initialize() {
         try {
-            socket = new Socket("localhost", 12345); // Замените на актуальный адрес и порт сервера
+            socket = new Socket("localhost", 12345);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
@@ -31,13 +31,16 @@ public class ChatController {
                 try {
                     String messageFromServer;
                     while ((messageFromServer = in.readLine()) != null) {
-                        final String message = messageFromServer;
-                        chatArea.appendText("Server: " + message + "\n");
+                        String message = messageFromServer;
+                        javafx.application.Platform.runLater(() -> {
+                            chatArea.appendText("Client 2: " + message + "\n");
+                        });
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }).start();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,7 +51,7 @@ public class ChatController {
         String message = messageField.getText();
         if (!message.isEmpty()) {
             chatArea.appendText("You: " + message + "\n");
-            out.println(message); // Отправка сообщения на сервер
+            out.println(message);
             messageField.clear();
         }
     }

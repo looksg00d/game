@@ -21,19 +21,19 @@ public class RegistrationController {
     private PasswordField passwordField;
 
     @FXML
-    private Label errorLabel; // Предполагается, что у вас есть метка для отображения ошибок
+    private Label errorLabel;
 
     @FXML
     void register(ActionEvent event) {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        if (!Validator.validateUsername(username)) {
+        if (!UsernamePasswordChecker.validateUsername(username)) {
             errorLabel.setText("Invalid username!");
             return;
         }
 
-        if (!Validator.validatePassword(password)) {
+        if (!UsernamePasswordChecker.validatePassword(password)) {
             errorLabel.setText("Password is too short!");
             return;
         }
@@ -43,7 +43,7 @@ public class RegistrationController {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, username);
-            pstmt.setString(2, password); // В реальном приложении пароль должен быть хэширован
+            pstmt.setString(2, password);
             pstmt.executeUpdate();
 
             showAlert(Alert.AlertType.INFORMATION, "Registration", "Registration was successful!");

@@ -6,10 +6,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import com.example.game00.clients.GuessNumberClient;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Random;
 
 public class GuessNumberController {
     @FXML
@@ -17,37 +17,39 @@ public class GuessNumberController {
     @FXML
     private TextArea textArea;
 
-    private int numberToGuess;
+    private GuessNumberClient gameClient;
 
     public void initialize() {
-        numberToGuess = new Random().nextInt(100) + 1; // Загадываем число от 1 до 100
+        try {
+            // инициализация
+            gameClient = new GuessNumberClient("localhost", 12346);
+            gameClient.setOnMessageReceived(this::handleServerMessage);
+        } catch (IOException e) {
+            textArea.appendText("Error connecting to the game server.\n");
+        }
+    }
+
+    private void handleServerMessage(String message) {
+        textArea.appendText(message + "\n");
     }
 
     @FXML
     private void processGuess() {
-        try {
-            int guess = Integer.parseInt(numberField.getText());
-            // Отправка догадки на сервер
-            // Получение и обработка ответа от сервера
-        } catch (NumberFormatException e) {
-            textArea.appendText("Enter the correct number!\n");
-        }
+        String guess = numberField.getText();
+        gameClient.sendGuess(guess); // юзер отправляет догадку
     }
-
 
     @FXML
     private void openChat() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/game00/chat.fxml")); // Укажите правильный путь к FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/game00/chat.fxml"));
             Parent root = loader.load();
-
             Stage chatStage = new Stage();
             chatStage.setTitle("Chat");
             chatStage.setScene(new Scene(root));
             chatStage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            // Обработка ошибок загрузки FXML
         }
     }
 }
